@@ -27,7 +27,11 @@
     dest: /home/ubuntu/000-default.conf
     force: yes
 
-- command : sudo mv /home/ubuntu/000-default.conf /etc/apache2/sites-available/000-default.conf
+- command : cp /home/ubuntu/000-default.conf /etc/apache2/sites-available/
+  become: yes
+  become_user: root
+
+-
 
 - name: install http-poxy
   command: sudo a2enmod proxy

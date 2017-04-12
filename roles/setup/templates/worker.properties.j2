@@ -1,31 +1,27 @@
 worker.list=loadbalancer
  
 
- 
-worker.tomcat1.type=http 
-worker.tomcat1.host=127.0.0.1
-worker.tomcat1.port={{ ports.0 }}
-# worker "tomcat1" uses up to 200 sockets, which will stay no more than 
+ {% for item in ports %}
+worker.tomcat{{loop.index }}.type=ajp13 
+worker.tomcat{{loop.index }}.host=127.0.0.1
+worker.tomcat{{loop.index }}.port={{ item }}
+# worker "tomcat{{loop.index }}" uses up to 200 sockets, which will stay no more than 
 # 10 minutes in the connection pool. 
-worker.tomcat1.connection_pool_size=200
-worker.tomcat1.connection_pool_timeout=600 
-# worker "tomcat1" will ask the operating system to send a KEEP-ALIVE 
+worker.tomcat{{loop.index }}.connection_pool_size=200
+worker.tomcat{{loop.index }}.connection_pool_timeout=600 
+# worker "tomcat{{loop.index }}" will ask the operating system to send a KEEP-ALIVE 
 # signal on the connection. 
-worker.tomcat1.socket_keepalive=1 
- 
- 
-worker.tomcat2.type=http
-worker.tomcat2.host=127.0.0.1
-worker.tomcat2.port={{ ports.1 }}
-# worker "tomcat2" uses up to 200 sockets, which will stay no more than 
-# 10 minutes in the connection pool. 
-worker.tomcat2.connection_pool_size=200
-worker.tomcat2.connection_pool_timeout=600 
-# worker "tomcat2" will ask the operating system to send a KEEP-ALIVE 
-# signal on the connection. 
-worker.tomcat2.socket_keepalive=1 
+worker.tomcat{{loop.index }}.socket_keepalive=1 
+
+{% endfor %}
+
+
  
 worker.jkstatus.type=status
  
 worker.loadbalancer.type=lb 
-worker.loadbalancer.balance_workers=tomcat1,tomcat2
+
+worker.loadbalancer.balance_workers={% for item in ports  %}
+tomcat{{ loop.index }}
+{%- if loop.first %},{% endif %}
+{% endfor %}

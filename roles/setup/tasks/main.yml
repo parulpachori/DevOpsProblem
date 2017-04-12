@@ -1,0 +1,45 @@
+- name: configure 2 tomcat instances
+  template:
+      src: templates/server.xml.j2
+      dest: /etc/tomcat7/server.xml
+      mode: 0644
+  become: yes
+  become_user: root
+
+- name: configure jk.conf
+  template:
+      src: templates/jk.conf.j2
+      dest: /etc/apache2/mods-enabled/jk.conf
+      mode: 0644
+  become: yes
+  become_user: root
+
+- name: configure worker.properties
+  template:
+      src: templates/worker.properties.j2
+      dest: /etc/libapache2-mod-jk/workers.properties
+      mode: 0644
+  become: yes
+  become_user: root
+
+- copy:
+    src: /Users/PA363241/templates/000-default.conf
+    dest: /home/ubuntu/000-default.conf
+    force: yes
+
+- command : sudo mv /home/ubuntu/000-default.conf /etc/apache2/sites-available/000-default.conf
+
+- name: install http-poxy
+  command: sudo a2enmod proxy
+
+
+- name: install http-poxy
+  command: sudo a2enmod proxy_http
+
+- service:
+    name: tomcat7
+    state: restarted
+
+- service:
+    name: apache2
+    state: restarted

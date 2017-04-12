@@ -22,10 +22,11 @@
   become: yes
   become_user: root
 
-- copy:
-    src: /Users/PA363241/templates/000-default.conf
-    dest: /home/ubuntu/000-default.conf
-    force: yes
+- name: configure 000-default.conf
+  template:
+      src: templates/000-default.conf.j2
+      dest: /home/ubuntu/000-default.conf
+      mode: 0644
 
 - command : cp /home/ubuntu/000-default.conf /etc/apache2/sites-available/
   become: yes

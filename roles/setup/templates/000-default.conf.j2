@@ -35,8 +35,8 @@
         # following line enables the CGI configuration for this host only
         # after it has been globally disabled with "a2disconf".
         #Include conf-available/serve-cgi-bin.conf
-ProxyPass / http://127.0.0.1:8080/
-        ProxyPassReverse / http://127.0.0.1:8081/
+ProxyPass / http://127.0.0.1:{{ ports.0 }}/
+        ProxyPassReverse / http://127.0.0.1:{{ ports.1 }}/
 
 </VirtualHost>
 

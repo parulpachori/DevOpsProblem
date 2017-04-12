@@ -31,19 +31,24 @@
   become: yes
   become_user: root
 
--
+- name: install proxy
+  command: a2enmod proxy
+  become: yes
+  become_user: root
 
-- name: install http-poxy
-  command: sudo a2enmod proxy
-
-
-- name: install http-poxy
-  command: sudo a2enmod proxy_http
+- name: install http-proxy
+  command: a2enmod proxy_http
+  become: yes
+  become_user: root
 
 - service:
     name: tomcat7
     state: restarted
+  become: yes
+  become_user: root
 
 - service:
     name: apache2
     state: restarted
+  become: yes
+  become_user: root
